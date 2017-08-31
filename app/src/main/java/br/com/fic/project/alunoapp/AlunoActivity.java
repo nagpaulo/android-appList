@@ -1,6 +1,7 @@
 package br.com.fic.project.alunoapp;
 
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,12 @@ import java.util.List;
 
 public class AlunoActivity extends AppCompatActivity {
     private EditText alunoEdit;
-    private ListView lsAlunos;
+    private ListView lwAlunos;
+
     private List<String> listAlunos;
+
     private ArrayAdapter<String> itemsAdapter;
+    private int adapterLayout = android.R.layout.simple_list_item_activated_1;
     private String aluno;
 
     @Override
@@ -33,22 +37,25 @@ public class AlunoActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        alunoEdit = (EditText) findViewById(R.id.alunoAdd);
-        lsAlunos = (ListView) findViewById(R.id.lsAlunos);
-        listAlunos = new ArrayList<String>();
-        aluno = alunoEdit.getText().toString();
-        listAlunos.add(aluno);
+        alunoEdit = (EditText) findViewById(R.id.alunoView);
+        lwAlunos = (ListView) findViewById(R.id.lsAlunos);
 
-        itemsAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listAlunos);
+        listAlunos = new ArrayList<String>();
+
+        itemsAdapter = new ArrayAdapter<String>(this,adapterLayout,listAlunos);
+        lwAlunos.setAdapter(itemsAdapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                lsAlunos.setAdapter(itemsAdapter);
+                aluno = alunoEdit.getText().toString();
+                listAlunos.add(aluno);
+                alunoEdit.setText("");
+
+                itemsAdapter.notifyDataSetChanged();
                 Snackbar.make(view, "Aluno " +aluno+ " Adicionado!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                alunoEdit.setText("");
             }
         });
     }
